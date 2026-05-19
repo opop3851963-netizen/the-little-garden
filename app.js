@@ -85,49 +85,78 @@ document.addEventListener('DOMContentLoaded', () => {
     let droneOsc1, droneOsc2, droneGain, lfo;
     let chimeTimer = null;
 
+    let droneOscs = [];
+    let filterLfo = null;
+    let ampLfo = null;
+
     function initAmbientSynth() {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // Master volume
+        // Master gain for drone (nature breeze)
         droneGain = audioCtx.createGain();
-        droneGain.gain.setValueAtTime(0.08, audioCtx.currentTime); // Soft volume
+        droneGain.gain.setValueAtTime(0.04, audioCtx.currentTime); // Gentle base volume
 
-        // Low-pass filter for cozy warm tone
+        // High-quality resonant lowpass filter for warm analog sweep
         const lowpass = audioCtx.createBiquadFilter();
         lowpass.type = 'lowpass';
-        lowpass.frequency.setValueAtTime(350, audioCtx.currentTime);
+        lowpass.frequency.setValueAtTime(220, audioCtx.currentTime);
+        lowpass.Q.setValueAtTime(1.8, audioCtx.currentTime); // Pleasant resonance accent
 
-        // Drone Oscillator 1 (Warm Deep Base)
-        droneOsc1 = audioCtx.createOscillator();
-        droneOsc1.type = 'sine';
-        droneOsc1.frequency.setValueAtTime(110, audioCtx.currentTime); // A2 Note
+        // Warm Analog Pad (Nature Breeze) - Lush major chord drone
+        // D2 (73.42Hz), A2 (110.00Hz), D3 (146.83Hz), F#3 (185.00Hz)
+        const chordNotes = [73.42, 110.00, 146.83, 185.00];
+        droneOscs = [];
 
-        // Drone Oscillator 2 (Slightly detuned for warm movement)
-        droneOsc2 = audioCtx.createOscillator();
-        droneOsc2.type = 'sine';
-        droneOsc2.frequency.setValueAtTime(110.5, audioCtx.currentTime);
+        chordNotes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            
+            // Triangle waves have beautiful warm harmonics suited for filtered pads
+            osc.type = 'triangle';
+            
+            // Detune slightly to create organic, rich analog beating/movement
+            const detuneAmount = (idx % 2 === 0 ? 0.3 : -0.3) + (Math.random() - 0.5) * 0.2;
+            osc.frequency.setValueAtTime(freq + detuneAmount, audioCtx.currentTime);
 
-        // Slow Modulator (LFO) for breathing effect
-        lfo = audioCtx.createOscillator();
-        lfo.type = 'sine';
-        lfo.frequency.setValueAtTime(0.12, audioCtx.currentTime); // Very slow 8-second cycle
+            // Lower notes are louder, higher notes softer to form a solid warm foundation
+            const voiceVol = idx === 0 ? 0.4 : idx === 1 ? 0.35 : idx === 2 ? 0.25 : 0.18;
+            oscGain.gain.setValueAtTime(voiceVol, audioCtx.currentTime);
+
+            osc.connect(oscGain);
+            oscGain.connect(lowpass);
+            droneOscs.push(osc);
+        });
+
+        // 1. Slow filter sweep LFO (Simulating breeze wind gusts)
+        filterLfo = audioCtx.createOscillator();
+        filterLfo.type = 'sine';
+        filterLfo.frequency.setValueAtTime(0.08, audioCtx.currentTime); // Ultra slow 12.5s sweep
         
-        const lfoGain = audioCtx.createGain();
-        lfoGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        const filterLfoGain = audioCtx.createGain();
+        filterLfoGain.gain.setValueAtTime(110, audioCtx.currentTime); // Modulate cutoff by 110Hz
+
+        filterLfo.connect(filterLfoGain);
+        filterLfoGain.connect(lowpass.frequency); // Modulate lowpass cutoff
+
+        // 2. Slow amplitude LFO (Nature breeze rise & fall)
+        ampLfo = audioCtx.createOscillator();
+        ampLfo.type = 'sine';
+        ampLfo.frequency.setValueAtTime(0.05, audioCtx.currentTime); // Slow 20s amplitude wave
+        
+        const ampLfoGain = audioCtx.createGain();
+        ampLfoGain.gain.setValueAtTime(0.015, audioCtx.currentTime); // Modulate volume gently
+
+        ampLfo.connect(ampLfoGain);
+        ampLfoGain.connect(droneGain.gain);
 
         // Connections
-        lfo.connect(lfoGain);
-        lfoGain.connect(droneGain.gain); // Modulate volume
-
-        droneOsc1.connect(lowpass);
-        droneOsc2.connect(lowpass);
         lowpass.connect(droneGain);
         droneGain.connect(audioCtx.destination);
 
-        // Start Drone
-        droneOsc1.start();
-        droneOsc2.start();
-        lfo.start();
+        // Start all oscillators and modulators
+        droneOscs.forEach(osc => osc.start());
+        filterLfo.start();
+        ampLfo.start();
 
         // Start Random Chime generator
         triggerRandomChime();
@@ -136,13 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function triggerRandomChime() {
         if (!synthActive) return;
 
-        // Sweet Pentatonic warm notes (Chimes / Singing bowl simulation)
-        const notes = [293.66, 329.63, 392.00, 440.00, 587.33, 659.25, 783.99]; // D4, E4, G4, A4, D5, E5, G5
+        // Beautiful high-register pentatonic notes for spiritual crystalline chimes
+        // D5 (587.33Hz), E5 (659.25Hz), G5 (783.99Hz), A5 (880.00Hz), D6 (1174.66Hz), E6 (1318.51Hz)
+        const notes = [587.33, 659.25, 783.99, 880.00, 1174.66, 1318.51];
         const randomNote = notes[Math.floor(Math.random() * notes.length)];
 
         playChime(randomNote);
 
-        // Schedule next chime between 6 and 14 seconds
+        // Schedule next chime between 6 and 14 seconds (as requested)
         const nextTime = 6000 + Math.random() * 8000;
         chimeTimer = setTimeout(triggerRandomChime, nextTime);
     }
@@ -150,45 +180,92 @@ document.addEventListener('DOMContentLoaded', () => {
     function playChime(frequency) {
         if (!audioCtx || audioCtx.state === 'suspended') return;
 
-        // Chime nodes
+        // 1. Core chime oscillator (Fundamental frequency)
         const chimeOsc = audioCtx.createOscillator();
-        chimeOsc.type = 'triangle'; // Pure, warm timbre
+        chimeOsc.type = 'sine'; // Clean root tone
         chimeOsc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
 
+        // 2. Inharmonic Overtone for rich metallic bell clink (Physical Modeling concept)
+        const metalOsc = audioCtx.createOscillator();
+        metalOsc.type = 'triangle';
+        // Inharmonic multiplier to create crystal metal ring
+        metalOsc.frequency.setValueAtTime(frequency * 2.76, audioCtx.currentTime);
+
+        // Chime envelopes
         const chimeGain = audioCtx.createGain();
         chimeGain.gain.setValueAtTime(0, audioCtx.currentTime);
-        // Soft attack, long decay
-        chimeGain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.5);
-        chimeGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 6.0);
+        // Soft immediate attack, very long sweet decay
+        chimeGain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.08);
+        chimeGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 8.0);
 
-        // Soft low-pass delay effect
+        const metalGain = audioCtx.createGain();
+        metalGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        // Instant attack, very rapid decay (creates the initial "ping" transient)
+        metalGain.gain.linearRampToValueAtTime(0.025, audioCtx.currentTime + 0.005);
+        metalGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+
+        // Spacey Delay & Stereo Panner
         const delay = audioCtx.createDelay();
-        delay.delayTime.setValueAtTime(0.6, audioCtx.currentTime);
+        delay.delayTime.setValueAtTime(0.8, audioCtx.currentTime); // Long space echo
 
         const delayGain = audioCtx.createGain();
-        delayGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        delayGain.gain.setValueAtTime(0.4, audioCtx.currentTime); // 40% feedback
+
+        // Random panning for crystalline three-dimensional field
+        const panner = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+        if (panner) {
+            const randomPan = (Math.random() - 0.5) * 1.6; // Pan between far-left and far-right
+            panner.pan.setValueAtTime(randomPan, audioCtx.currentTime);
+        }
 
         // Connections
         chimeOsc.connect(chimeGain);
-        chimeGain.connect(audioCtx.destination);
+        metalOsc.connect(metalGain);
 
-        // Simple delay loop
+        // Routing through panning/destination
+        const synthDestination = panner ? panner : audioCtx.destination;
+        if (panner) panner.connect(audioCtx.destination);
+
+        chimeGain.connect(synthDestination);
+        metalGain.connect(synthDestination);
+
+        // Route main sound to delay loop for beautiful echo tails
         chimeGain.connect(delay);
         delay.connect(delayGain);
-        delayGain.connect(audioCtx.destination);
-        delayGain.connect(delay); // Feedback
+        delayGain.connect(synthDestination);
+        delayGain.connect(delay); // Feedback loops
 
+        // Start & scheduling
         chimeOsc.start();
-        chimeOsc.stop(audioCtx.currentTime + 7);
+        metalOsc.start();
+
+        chimeOsc.stop(audioCtx.currentTime + 9.0);
+        metalOsc.stop(audioCtx.currentTime + 1.0);
     }
 
     function stopAmbientSynth() {
-        if (droneOsc1) droneOsc1.stop();
-        if (droneOsc2) droneOsc2.stop();
-        if (lfo) lfo.stop();
-        if (chimeTimer) clearTimeout(chimeTimer);
-        if (audioCtx) audioCtx.close();
-        audioCtx = null;
+        if (droneOscs.length) {
+            droneOscs.forEach(osc => {
+                try { osc.stop(); } catch(e){}
+            });
+            droneOscs = [];
+        }
+        if (filterLfo) {
+            try { filterLfo.stop(); } catch(e){}
+            filterLfo = null;
+        }
+        if (ampLfo) {
+            try { ampLfo.stop(); } catch(e){}
+            ampLfo = null;
+        }
+        if (chimeTimer) {
+            clearTimeout(chimeTimer);
+            chimeTimer = null;
+        }
+        if (audioCtx) {
+            audioCtx.close();
+            audioCtx = null;
+        }
     }
 
     bgmToggle.addEventListener('click', () => {
