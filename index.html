@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>작은 정원 (The Little Garden) - 지친 네 영혼이 머무는 곳</title>
+    <!-- Google Fonts: Noto Serif KR, Plus Jakarta Sans, and Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="main-header fade-in">
+        <div class="logo">
+            <span class="serif-title">작은 정원</span>
+            <span class="sub-logo">The Little Garden</span>
+        </div>
+        <nav class="header-nav">
+            <button id="bgm-toggle" class="nav-btn" aria-label="음악 켜고 끄기">
+                <svg class="icon-music" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 10l12-3M9 19c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm12-3c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z" />
+                </svg>
+                <span class="btn-text">정원의 선율</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg" style="background-image: url('assets/garden_hero.png');"></div>
+            <div class="hero-overlay"></div>
+            
+            <div class="hero-content">
+                <p class="hero-intro fade-in-up delay-1">Comfort & Spiritual Rest</p>
+                <h1 class="hero-title serif-title fade-in-up delay-2">
+                    지친 네 영혼이 머무는 곳,<br>
+                    <span class="highlight">그분의 작은 정원</span>
+                </h1>
+                <p class="hero-sub fade-in-up delay-3">
+                    애써 괜찮은 척하지 않아도 돼요.<br>
+                    예수님의 따스한 품이 이미 여기에 있으니까요.
+                </p>
+                <div class="hero-cta fade-in-up delay-4">
+                    <a href="#garden-contents" class="cta-button" id="enter-garden-btn">
+                        <span>내 영혼의 쉼터로 들어가기</span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator fade-in">
+                <span class="mouse-wheel"></span>
+                <span class="label">아래로 천천히 내려가 보세요</span>
+            </div>
+        </section>
+
+        <!-- Garden Contents Section -->
+        <section id="garden-contents" class="contents-section">
+            <div class="section-header fade-in-trigger">
+                <p class="section-tag">Spiritual Wellness</p>
+                <h2 class="serif-title">쉼과 머무름, 영혼을 가꾸는 세 가지 시간</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- 1. 말씀의 씨앗 (Lectio Divina) -->
+                <div class="card-item fade-in-trigger" id="card-lectio" data-target="modal-lectio">
+                    <div class="card-img" style="background-image: url('assets/sprout_seed.png');"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <span class="card-badge">Lectio Divina</span>
+                        <h3 class="serif-title">말씀의 씨앗</h3>
+                        <p class="card-desc">매일 아침 마음 밭에 심는 예수님의 따뜻한 사랑의 문장들.</p>
+                        <button class="card-action-btn">씨앗 심기</button>
+                    </div>
+                </div>
+
+                <!-- 2. 머무름의 시간 (Centering Prayer) -->
+                <div class="card-item fade-in-trigger" id="card-centering" data-target="modal-centering">
+                    <div class="card-img" style="background-image: url('assets/centering_candle.png');"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <span class="card-badge">Centering Prayer</span>
+                        <h3 class="serif-title">머무름의 시간</h3>
+                        <p class="card-desc">지친 생각을 멈추고 주님의 품 안에서 온전히 쉬는 침묵.</p>
+                        <button class="card-action-btn">침묵으로 머물기</button>
+                    </div>
+                </div>
+
+                <!-- 3. 오늘의 가지치기 (Examen) -->
+                <div class="card-item fade-in-trigger" id="card-examen" data-target="modal-examen">
+                    <div class="card-img" style="background-image: url('assets/pruning_twigs.png');"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <span class="card-badge">Examen</span>
+                        <h3 class="serif-title">오늘의 가지치기</h3>
+                        <p class="card-desc">하루 동안 나를 괴롭혔던 외로움과 상처를 주님 앞에 내려놓는 밤.</p>
+                        <button class="card-action-btn">가지치기 시작</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <p class="footer-blessing serif-title">“수고하고 무거운 짐 진 자들아 다 내게로 오라 내가 너희를 쉬게 하리라”</p>
+        <p class="footer-copyright">&copy; 2026 작은 정원 (The Little Garden). All spiritual peace reserved.</p>
+    </footer>
+
+    <!-- INTERACTIVE MODALS (Spiritual Wellness Drawers) -->
+    
+    <!-- 1. 말씀의 씨앗 Modal -->
+    <div id="modal-lectio" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            <div class="modal-body">
+                <span class="modal-category">말씀의 씨앗 (Lectio Divina)</span>
+                <h3 class="serif-title modal-title">오늘 내 마음에 심는 하나님의 말씀</h3>
+                <p class="modal-subtitle">아래의 빈 화분을 터치해 말씀의 씨앗을 심어보세요.</p>
+                
+                <div class="lectio-interactive-area">
+                    <div class="pot-container" id="pot-trigger">
+                        <!-- Sprout sprout animations -->
+                        <div class="pot-graphic">
+                            <div class="soil"></div>
+                            <div class="sprout-wrapper">
+                                <svg class="sprout-svg" viewBox="0 0 100 100">
+                                    <path class="sprout-stem" d="M50,85 Q50,60 50,60" fill="none" stroke="#607261" stroke-width="3" stroke-linecap="round" />
+                                    <path class="sprout-leaf leaf-l" d="M50,60 Q35,50 35,40 Q45,45 50,60" fill="#7B907E" />
+                                    <path class="sprout-leaf leaf-r" d="M50,60 Q65,50 65,40 Q55,45 50,60" fill="#7B907E" />
+                                    <circle class="sprout-glow" cx="50" cy="40" r="2" fill="#D4B26F" />
+                                </svg>
+                            </div>
+                            <div class="interactive-tap-glow"></div>
+                        </div>
+                        <span class="pot-label">화분을 터치하여 씨앗을 심어보세요</span>
+                    </div>
+
+                    <div class="lectio-result-area" style="display: none;">
+                        <div class="verse-card">
+                            <p class="verse-text serif-title" id="verse-content"></p>
+                            <p class="verse-reference" id="verse-ref"></p>
+                        </div>
+                        <button class="reset-action-btn" id="btn-reseed">새로운 씨앗 심기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 머무름의 시간 Modal -->
+    <div id="modal-centering" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            <div class="modal-body">
+                <span class="modal-category">머무름의 시간 (Centering Prayer)</span>
+                <h3 class="serif-title modal-title">지친 호흡을 정렬하고, 주님 품에 머물기</h3>
+                <p class="modal-subtitle">둥근 고리의 팽창과 수축에 맞춰 숨을 천천히 들이마시고 내쉬어 봅니다.</p>
+                
+                <div class="breathing-interactive-area">
+                    <div class="breathing-visual-container">
+                        <div class="breathing-circle-outer"></div>
+                        <div class="breathing-circle-inner" id="breathing-circle"></div>
+                        <div class="breathing-timer-text" id="breathing-status">숨 고르기</div>
+                    </div>
+                    
+                    <div class="breathing-controls">
+                        <button class="action-btn" id="btn-breathing-toggle">침묵 시작하기</button>
+                        <p class="breathing-tip">"주님, 제가 주님의 품 안에 있습니다. 제 어지러운 생각을 멈추고 주님을 바라봅니다."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 오늘의 가지치기 Modal -->
+    <div id="modal-examen" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            <div class="modal-body">
+                <span class="modal-category">오늘의 가지치기 (Examen)</span>
+                <h3 class="serif-title modal-title">상처와 외로움을 내려놓는 저녁의 가지치기</h3>
+                <p class="modal-subtitle">오늘 하루 마음을 아프게 했던 외로움, 상처, 혹은 버거운 짐들을 아래에 솔직하게 적어주세요. 주님께서 대신 맡아주실 것입니다.</p>
+                
+                <div class="examen-interactive-area">
+                    <div class="pruning-board" id="pruning-board">
+                        <div class="canvas-container" id="worry-canvas-container">
+                            <textarea id="worry-input" placeholder="이곳에 오늘 나를 괴롭혔던 모든 생각을 적어보세요... (예: 불안했던 마음, 관계에서의 외로움, 내일에 대한 두려움 등)"></textarea>
+                            <canvas id="disintegrate-canvas" style="display: none;"></canvas>
+                        </div>
+                        
+                        <div class="board-action">
+                            <button class="action-btn gold-accent" id="btn-pruning">주님의 십자가 아래 내려놓기</button>
+                        </div>
+                    </div>
+
+                    <div class="pruning-result-area" style="display: none;">
+                        <div class="blessing-card fade-in">
+                            <div class="cross-glowing-icon">
+                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#C5A880" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-12h-15" />
+                                </svg>
+                            </div>
+                            <p class="blessing-text serif-title">
+                                "내가 세상 끝날까지 너희와 항상 함께 있으리라 하시니라" <br><span>(마태복음 28:20)</span>
+                            </p>
+                            <p class="comfort-message">
+                                오늘 당신을 힘들게 했던 모든 짐이 사라졌습니다.<br>
+                                예수님께서 그 가시를 대신 거두어 가셨으니,<br>
+                                이제 이 고요한 정원에서 평안히 눈을 붙이셔도 좋습니다.
+                            </p>
+                        </div>
+                        <button class="reset-action-btn" id="btn-examen-reset">다시 내려놓기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Sound Controller (JS Web Audio Synthesizer) -->
+    <script src="app.js"></script>
+</body>
+</html>
