@@ -231,23 +231,49 @@ button {
 .hero-content {
     position: relative;
     z-index: 3;
-    max-width: 800px;
+    max-width: 760px;
     margin-top: 40px;
+    background: rgba(253, 251, 247, 0.82); /* Soothing warm ivory glass */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 50px 45px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 30px 60px -15px rgba(90, 110, 93, 0.12),
+        0 0 80px -10px rgba(253, 251, 247, 0.7);
+    animation: contentFadeInUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes contentFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero-intro {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.3em;
-    color: var(--color-sage);
-    margin-bottom: 20px;
+    color: var(--color-sage-light);
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
 .hero-title {
-    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-size: clamp(1.8rem, 4.5vw, 3.4rem);
     line-height: 1.35;
-    margin-bottom: 30px;
-    color: var(--text-primary);
+    margin-bottom: 25px;
+    color: #2C2621; /* Richer charcoal color for ultra contrast and sharpness */
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .hero-title .highlight {
@@ -266,16 +292,18 @@ button {
     background: var(--color-gold-light);
     z-index: -1;
     border-radius: 4px;
-    opacity: 0.6;
+    opacity: 0.8; /* Higher opacity for sharper line */
 }
 
 .hero-sub {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto 40px;
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    color: #4A433C; /* Darkened secondary text for crystal clear legibility */
+    max-width: 580px;
+    margin: 0 auto 35px;
     word-break: keep-all;
-    line-height: 1.8;
+    line-height: 1.85;
+    font-weight: 400;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
 .cta-button {
